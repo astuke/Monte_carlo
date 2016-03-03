@@ -1,4 +1,4 @@
-function hw4()
+function mc()
 
     StepSize=linspace(0.1,1.0,10);
     NSteps=1000000;
