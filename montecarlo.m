@@ -6,7 +6,7 @@ function mc()
  NLags=1;
  C1=zeros(0,1);
  
- for i=0.1:0.1:1   %this is the the loop over the step size
+ for i=0.1:0.1:1   %loop over the step size
      
     for k=1:NSteps   % loop over all steps
     [r,acc]=update(r,acc,i);
@@ -16,15 +16,12 @@ function mc()
   C=autocorr(O,NLags); %autocorrelation function 
   C1=[C1 C(2)];
   %disp('Accpetance = ') 
-  acc=acc/NSteps % calculate and output acceptance --> should be 50%
+  acc=acc/NSteps; % calculate and output acceptance --> should be 50%
  end
  
- C1
-
- 
  ExpectedO=mean(O) % expectation value of operator
- %hist(O,100); % error histogram
- %plot(C);
+ hist(O,100); % error histogram
+ plot(C);
  sigma=std(O);
  Nc=(1+C(2))/(1-C(2));
  error=sigma/sqrt(NSteps/Nc)   % estimated error of result
