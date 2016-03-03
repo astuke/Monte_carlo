@@ -9,7 +9,7 @@ function hw4()
     AcceptanceRatio=zeros(length(StepSize),1);
     ErrorEstimate=zeros(length(StepSize),1);
     
-    for k=1:length(StepSize)
+    for k=1:length(StepSize) %loop over step sizes
         
         [C1(k),AcceptanceRatio(k),O(k),ErrorEstimate(k)]=mc(StepSize(k),NSteps,NThermalization);
         
@@ -49,19 +49,19 @@ function [C1,AcceptanceRatio,ExpectationValue,ErrorEstimate]=mc(StepSize,NSteps,
     for k=1:NSteps
         
         [r,accepted]=update(r,StepSize);
-        OValues(k)=operator(r);
+        OValues(k)=operator(r); %operator value of current step 
         AcceptanceRatio=AcceptanceRatio+accepted;
         
     end
     
     AcceptanceRatio=AcceptanceRatio/NSteps;
     
-    ExpectationValue=mean(OValues);
+    ExpectationValue=mean(OValues); %calculate expectation value of k operator values
     
     C=autocorr(OValues,1);
     C1=C(2);
     Nc=-1/log(C1)
-    ErrorEstimate=std(OValues)/sqrt(NSteps/Nc);
+    ErrorEstimate=std(OValues)/sqrt(NSteps/Nc); %estimate the error
     
     fprintf('StepSize=%f\n',StepSize);
     fprintf('<O>=%f +- %f\n',ExpectationValue,ErrorEstimate);
@@ -69,12 +69,13 @@ function [C1,AcceptanceRatio,ExpectationValue,ErrorEstimate]=mc(StepSize,NSteps,
     
 end
 
-function [r,accepted]=update(r,StepSize)
+function [r,accepted]=update(r,StepSize) %update function for importance sampling
     
     NElem=size(r);
-    step=2*(rand(NElem(1),NElem(2))-0.5)*StepSize;
-    rnew=r+step;
+    step=2*(rand(NElem(1),NElem(2))-0.5)*StepSize; % generates random number 
+    rnew=r+step; %move electron position by random number -->update
     
+    %accept update with probability
     if weight(r+step)/weight(r)>rand()
         r=r+step;
         accepted=1;
@@ -86,7 +87,7 @@ end
 
 function O=operator(r)
     
-    O=1/norm(r(1:3)-r(4:6)); %The coulomb operator
+    O=1/norm(r(1:3)-r(4:6)); %Coulomb operator
     %O=norm(r(1:3)); %|r_1|
     %O=norm(r(4:6)); %|r_2|
     %O=r(1); %x_1
