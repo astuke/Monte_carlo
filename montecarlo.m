@@ -69,15 +69,16 @@ function [C1,AcceptanceRatio,ExpectationValue,ErrorEstimate]=mc(StepSize,NSteps,
     
 end
 
-function [r,accepted]=update(r,StepSize) %update function for importance sampling
+%Monte Carlo algorithm: Change of electron position is accepted with certain probability
+function [r,accepted]=update(r,StepSize) 
     
     NElem=size(r);
     step=2*(rand(NElem(1),NElem(2))-0.5)*StepSize; % generates random number 
-    rnew=r+step; %move electron position by random number -->update
+    rnew=r+step; %propose to move electron position by random number 
     
     %accept update with probability
     if weight(r+step)/weight(r)>rand()
-        r=r+step;
+        r=r+step; %update position
         accepted=1;
     else
         accepted=0;
